@@ -1,0 +1,20 @@
+name: 'the_dbt_dojo'
+version: '1.0.0'
+
+profile: 'the_dbt_dojo'
+
+model-paths: ["src/models"]
+analysis-paths: ["src/analyses"]
+test-paths: ["src/tests"]
+seed-paths: ["src/seeds"]
+macro-paths: ["src/macros"]
+snapshot-paths: ["src/snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  the_dbt_dojo:
+    example:
+      +materialized: view

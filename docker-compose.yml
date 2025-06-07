@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: dbt_dojo_postgres
+    environment:
+      POSTGRES_USER: dojo_user
+      POSTGRES_PASSWORD: dojo_pass
+      POSTGRES_DB: dojo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - dojo_net
+
+  flyway:
+    image: flyway/flyway:11
+    container_name: dbt_dojo_flyway
+    depends_on:
+      - postgres
+    volumes:
+      - ./docker/flyway/sql:/flyway/sql
+      - ./docker/flyway/conf:/flyway/conf
+    command: "-connectRetries=60 migrate"
+    networks:
+      - dojo_net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: dbt_dojo_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@dbtdojo.com
+      PGADMIN_DEFAULT_PASSWORD: dojo_admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - dojo_net
+
+  dbt:
+    build:
+      context: .
+      dockerfile: docker/dbt/Dockerfile
+    container_name: the_dbt_dojo_dbt
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    networks:
+      - dojo_net
+    tty: true
+    stdin_open: true
+
+volumes:
+  pg_data:
+  pgadmin_data:
+
+networks:
+  dojo_net:
+    driver: bridge

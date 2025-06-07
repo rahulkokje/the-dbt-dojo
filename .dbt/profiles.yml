@@ -1,0 +1,12 @@
+the_dbt_dojo:
+  outputs:
+    dev:
+      dbname: dojo_db
+      host: postgres
+      pass: dojo_pass
+      port: 5432
+      schema: staging
+      threads: 2
+      type: postgres
+      user: dojo_user
+  target: dev
