@@ -1,3 +1,6 @@
 # dbt core
 dbt-core==1.9.6
 dbt-postgres==1.9.0
+# data injestion
+pandas
+psycopg2-binary
