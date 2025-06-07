@@ -16,5 +16,9 @@ clean-targets:
 
 models:
   the_dbt_dojo:
-    example:
+    staging:
+      +schema: staging
+      +materialized: table
+    marts:
+      +schema: marts
       +materialized: view
